@@ -1,0 +1,44 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gt-api
+spec:
+  selector:
+    app: gt-api
+  ports:
+    - port: 4000
+      targetPort: 4000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gt-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gt-api
+  template:
+    metadata:
+      labels:
+        app: gt-api
+    spec:
+      containers:
+        - name: gt-api
+          image: gabtec/api:v3
+          imagePullPolicy: Always
+          env:
+            - name: DB_USER
+              value: admin
+            - name: DB_PASSWORD
+              value: admin
+            - name: DB_NAME
+              value: deno_db
+            - name: DB_HOST
+              value: gt-db
+            - name: DB_PORT
+              value: '5432'
+          ports:
+            - containerPort: 4000

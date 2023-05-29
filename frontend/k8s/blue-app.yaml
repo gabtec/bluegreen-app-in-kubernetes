@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gt-blue
+spec:
+  selector:
+    app: gt-blue
+  ports:
+    - port: 80
+      targetPort: 80
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gt-blue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gt-blue
+  template:
+    metadata:
+      labels:
+        app: gt-blue
+    spec:
+      containers:
+        - name: gt-blue
+          image: gabtec/bluegreen:vblue
+          imagePullPolicy: Always
+          env:
+            - name: API_SERVICE
+              value: gt-api
+            - name: API_NAMESPACE
+              value: default
+            - name: API_PORT
+              value: '4000'
+          ports:
+            - containerPort: 80
