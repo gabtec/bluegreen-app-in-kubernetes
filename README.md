@@ -56,3 +56,16 @@ $ kubectl exec -it pod/$(kubectl get pods | grep gt-db | awk '{print $1}') -- /b
 $ psql -U admin -d deno_db
 > \l
 ```
+
+## Add argocd
+
+```sh
+# edit ingress deploy and add a flag --enable-ssl-passthrough
+$ kubectl edit deploy ingress-nginx-controller -n ingress-nginx
+# --> add "--enable-ssl-passthrough" on args array
+
+#kubectl get deploy ingress-nginx-controller -n ingress-nginx -o jsonpath="{.spec.template.spec.containers[0].args}"
+
+# get argo passwd
+$ k get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d
+```
