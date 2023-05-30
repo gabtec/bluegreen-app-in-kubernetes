@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: gt-green
-          image: gabtec/bluegreen:vgreen
+          image: gabtec/green:v1
           imagePullPolicy: Always
           env:
             - name: API_SERVICE
