@@ -10,8 +10,8 @@
   display: grid;
   grid-template-rows: 1fr auto;
   /* background-color: aquamarine; */
-  /* background-color: #0078d4; */
-  background-color: #ff9900;
+  background-color: #0078d4;
+  /* background-color: #ff9900; */
 }
 
 .gt_logo {
