@@ -30,10 +30,26 @@ spec:
           image: postgres:15.1-alpine
           env:
             - name: POSTGRES_PASSWORD
-              value: admin
+              # value: admin
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret #name of the secret kind
+                  key: DB_PASSWORD #name of var in secret file
             - name: POSTGRES_USER
               value: admin
             - name: POSTGRES_DB
               value: deno_db
           ports:
             - containerPort: 5432
+          # volumeMounts:
+          #   - name: local-volume
+          #     mountPath: /var/lib/postgresql/data
+      # volumes:
+      ## DANGER: when learning, we must delete this volume, o recreate the container with new variables
+      #   - name: local-volume
+      #     hostPath:
+      #       path: /volumes/db/data
+      #       type: DirectoryOrCreate
+      #   - name: secrets-volume
+      #     secret:
+      #       secretName: app-secret

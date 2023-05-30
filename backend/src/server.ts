@@ -8,7 +8,7 @@ const PORT = 4000;
 
 const dbParams = {
   user: Deno.env.get('DB_USER') || 'admin',
-  password: Deno.env.get('DB_PASSWORS') || 'admin',
+  password: Deno.env.get('DB_PASSWORD') || 'admin',
   database: Deno.env.get('DB_NAME') || 'deno_db',
   hostname: Deno.env.get('DB_HOST') || 'localhost',
   // hostname: 'gt-db',

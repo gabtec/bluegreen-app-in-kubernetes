@@ -25,15 +25,42 @@ spec:
       labels:
         app: gt-api
     spec:
+      volumes:
+        - name: vault
+          secret:
+            secretName: app-secret
+            items:
+              - key: 'atlas.hcl'
+                path: 'atlas.hcl'
+      initContainers:
+        - name: migrations-before-api-up
+          image: gabtec/bluegreen-db:v2
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: vault
+              mountPath: '/etc/vault'
+          args:
+            [
+              'migrate',
+              'apply',
+              '-c',
+              'file:///etc/vault/atlas.hcl',
+              '--env',
+              'k8s',
+            ]
       containers:
         - name: gt-api
-          image: gabtec/api:v3
+          image: gabtec/bluegreen-api:v1
           imagePullPolicy: Always
           env:
             - name: DB_USER
               value: admin
             - name: DB_PASSWORD
-              value: admin
+              # value: admin
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: DB_PASSWORD
             - name: DB_NAME
               value: deno_db
             - name: DB_HOST
