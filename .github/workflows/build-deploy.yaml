@@ -1,0 +1,40 @@
+name: build-deploy
+
+on:
+  push:
+    branches: ['main']
+    paths:
+      - 'frontend/src/**'
+    # paths-ignore:
+    #   - '**.md'
+    #   - 'k8s/**'
+  # pull_request:
+  #   branches: ['main']
+
+jobs:
+  # ------------------------------------------ j1
+  build-and-publish: # TODO
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build and push to docker.io
+        uses: gabtec/idp-templates-gh-actions/composite-actions/build-push-docker.io@main
+        with:
+          image_name: gabtec/bluegreen
+          registry_username: ${{ secrets.REG_USER }}
+          registry_password: ${{ secrets.REG_PASSWD }}
+      - name: Install Kustomize
+        uses: imranismail/setup-kustomize@v2
+      - name: Kustomize deployment image tag
+        run: |
+          cd k8s
+          kustomize edit set image gabtec/bluegreen:${{ github.sha }}
+          git config --local user.email "actions@github.com"
+          git config --local user.name "CD Action"
+          git add .
+          git commit -m "ci: update `gabtec/bluegreen` image tag to `${{ github.sha }}`"
+          git push
