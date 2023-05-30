@@ -39,7 +39,7 @@ jobs:
         uses: imranismail/setup-kustomize@v2
       - name: Kustomize deployment image tag
         run: |
-          cd k8s
+          cd frontend/k8s
           kustomize edit set image gabtec/bluegreen:${{ github.sha }}
           git config --local user.email "actions@github.com"
           git config --local user.name "CD Action"
