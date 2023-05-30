@@ -1,10 +1,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ingress.yaml
-  - green-app.yaml
-  - blue-app.yaml
+- ingress.yaml
+- green-app.yaml
+- blue-app.yaml
 
 images:
-  - name: gabtec/bluegreen
-    newTag: b7cd31d211dab0a9c1ddd2f37c9cadbd6a5295c6
+- name: gabtec/bluegreen
+  newTag: f4705dd87c2489aa64c579373fb94ba3cfd5b59f
